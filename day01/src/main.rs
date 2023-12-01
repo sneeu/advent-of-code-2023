@@ -81,10 +81,10 @@ mod test {
     #[test]
     fn test_parse_line2() {
         assert_eq!(crate::parse_line2("two1nine"), [2, 1, 9]);
-        assert_eq!(crate::parse_line2("eightwothree"), [8, 3]);
+        assert_eq!(crate::parse_line2("eightwothree"), [8, 2, 3]);
         assert_eq!(crate::parse_line2("abcone2threexyz"), [1, 2, 3]);
         assert_eq!(crate::parse_line2("4nineeightseven2"), [4, 9, 8, 7, 2]);
-        assert_eq!(crate::parse_line2("zoneight234"), [1, 2, 3, 4]);
+        assert_eq!(crate::parse_line2("zoneight234"), [1, 8, 2, 3, 4]);
         assert_eq!(crate::parse_line2("7pqrstsixteen"), [7, 6]);
 
         assert_eq!(crate::parse_line2("144six"), [1, 4, 4, 6]);
