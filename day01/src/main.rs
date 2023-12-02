@@ -2,7 +2,6 @@ static INPUT: &str = include_str!("../input.txt");
 
 fn parse_line(line: &str) -> Vec<u8> {
     line.chars()
-        .into_iter()
         .filter(|c| char::is_numeric(*c))
         .map(|c| (c as u8) - 48)
         .collect()
@@ -71,6 +70,7 @@ fn main() {
     println!("Day 1, part II: {}", part2(INPUT));
 }
 
+#[cfg(test)]
 mod test {
     #[test]
     fn test_part1() {
