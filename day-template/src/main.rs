@@ -18,7 +18,7 @@ mod test {
     #[test]
     fn test_part1() {
         let input = "";
-        assert_eq!(crate::part1(input), o);
+        assert_eq!(crate::part1(input), 0);
     }
 
     #[test]
