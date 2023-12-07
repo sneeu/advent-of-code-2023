@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use nom::{
     bytes::complete::{tag, take_until},
     character::complete::{self as cc, space1},
@@ -7,16 +9,15 @@ use nom::{
     IResult,
 };
 
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Mapping {
-    pub from: u64,
-    pub to: u64,
-    pub length: u64,
+    pub from: Range<u64>,
+    pub delta: u64,
 }
 
 #[derive(Debug)]
 pub struct Map {
-    pub name: String,
+    pub name: Option<String>,
     pub mappings: Vec<Mapping>,
 }
 
@@ -27,14 +28,20 @@ fn num(i: &str) -> IResult<&str, u64> {
 fn parse_mapping(i: &str) -> IResult<&str, Mapping> {
     let (i, (to, _, from, _, length)) = tuple((num, space1, num, space1, num))(i)?;
 
-    Ok((i, Mapping { from, to, length }))
+    Ok((
+        i,
+        Mapping {
+            from: from..from + length,
+            delta: to - from,
+        },
+    ))
 }
 
 fn mappings(i: &str) -> IResult<&str, Vec<Mapping>> {
     let (i, mappings) = separated_list1(tag("\n"), parse_mapping)(i)?;
 
     let mut new_mappings = mappings.clone();
-    new_mappings.sort_by(|a, b| a.from.cmp(&b.from));
+    new_mappings.sort_by(|a, b| a.from.start.cmp(&b.from.start));
 
     Ok((i, new_mappings))
 }
@@ -45,7 +52,7 @@ fn parse_map(i: &str) -> IResult<&str, Map> {
     Ok((
         i,
         Map {
-            name: name.to_string(),
+            name: Some(name.to_string()),
             mappings,
         },
     ))
